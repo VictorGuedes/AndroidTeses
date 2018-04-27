@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fundoApp"
+    android:fitsSystemWindows="true"
+    tools:context="com.example.vitu.projetotese.activitys.ConversaActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+    </android.support.design.widget.AppBarLayout>
+
+
+    <!--
+    TROCAR POR RECYCLER
+    <ListView
+        android:id="@+id/msgListView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/form"
+        android:divider="@null"
+        android:dividerHeight="0dp"
+        android:paddingBottom="10dp"
+        android:text="hellow" />-->
+    <LinearLayout
+        android:id="@+id/form"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:background="#FFFFFF"
+        android:orientation="horizontal">
+
+
+        <EditText
+            android:id="@+id/edit_text_mensagem"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.72"
+            android:ems="10"
+            android:maxHeight="80dp"
+            android:inputType="textMultiLine"
+            android:scrollbars="vertical"
+            android:fadeScrollbars="false"
+            android:hint="@string/textoChat"
+            android:elevation="@dimen/fab_margin"/>
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fabOpen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_action_add"
+                android:maxHeight="80dp"
+                android:elevation="@dimen/fab_margin" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fabEnviar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_action_enviar"
+                android:maxHeight="80dp"
+                android:visibility="invisible"
+                android:elevation="@dimen/fab_margin" />
+
+        </FrameLayout>
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabAnexo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/form"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="9dp"
+        android:src="@drawable/ic_action_anexo"
+        android:visibility="invisible"
+        android:backgroundTint="@color/colorFabAnexo"
+        app:fabSize="normal"
+        app:elevation="6dp"
+        app:pressedTranslationZ="12dp" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabFoto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/fabAnexo"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="9dp"
+        android:src="@drawable/ic_action_photo"
+        android:visibility="invisible"
+        android:backgroundTint="@color/colorFabPhoto"
+        app:fabSize="normal"
+        app:elevation="6dp"
+        app:pressedTranslationZ="12dp" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabGaleria"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/fabFoto"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="9dp"
+        android:src="@drawable/ic_action_galeria"
+        android:visibility="invisible"
+        android:backgroundTint="@color/colorFabGaleria"
+        app:fabSize="normal"
+        app:elevation="6dp"
+        app:pressedTranslationZ="12dp" />
+
+</RelativeLayout>

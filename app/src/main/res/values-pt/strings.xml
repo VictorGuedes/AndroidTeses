@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">IpbTeses</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="teses">Teses</string>
+    <string name="conversas">Conversas</string>
+    <string name="documentos">Documentos</string>
+    <string name="configuracoes">Configurações</string>
+    <string name="textoChat">Digite aqui...</string>
+    <string name="MsgpermissaoCamera">O app precisa de permissão para acessar a camera</string>
+    <string name="MsgSemPermissaoCamera">Precisa liberar permissão para camera</string>
+
+    <string name="MsgpermissaoGaleria">O app precisa de permissão para acessar a galeria</string>
+
+    <string name="filtroPropostas">Área de Interesse da Tese</string>
+    <string name="filtro">Filtro Tese</string>
+</resources>

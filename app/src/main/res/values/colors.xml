@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#820053</color>
+    <color name="colorPrimaryDark">#63003f</color>
+    <color name="colorAccent">#820053</color>
+    <color name="fundoApp">#FFFFFF</color>
+    <color name="colorFabAnexo">#2196F3</color>
+    <color name="colorFabPhoto">#fb0000</color>
+    <color name="colorFabGaleria">#dfdc00</color>
+</resources>
