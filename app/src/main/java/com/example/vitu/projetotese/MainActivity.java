@@ -2,12 +2,8 @@ package com.example.vitu.projetotese;
 
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AlertDialog;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -18,10 +14,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.vitu.projetotese.fragments.ConversasFragment;
-import com.example.vitu.projetotese.fragments.DocumentosFragment;
 import com.example.vitu.projetotese.fragments.TesesFragment;
 import com.example.vitu.projetotese.utils.Alerts;
-import com.example.vitu.projetotese.utils.GerenciamentoGaleria;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -97,10 +91,6 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_conversas) {
             ConversasFragment fr = new ConversasFragment();
-            openFragment(fr);
-
-        } else if (id == R.id.nav_documentos) {
-            DocumentosFragment fr = new DocumentosFragment();
             openFragment(fr);
 
         } else if (id == R.id.nav_share) {

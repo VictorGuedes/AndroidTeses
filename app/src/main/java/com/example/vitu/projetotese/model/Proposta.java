@@ -6,37 +6,48 @@ package com.example.vitu.projetotese.model;
 
 public class Proposta {
 
-    private String Titulo;
-    private String Criado;
-    private String Objetivo;
+    private String ID_PROPOSTA;
+    private String TITULO;
+    private String OBJETIVO;
+    private Professor Professor;
 
-    public Proposta(String titulo, String criado, String objetivo) {
-        Titulo = titulo;
-        Criado = criado;
-        Objetivo = objetivo;
+
+    public Proposta(String id, String titulo, String objetivo, Professor professor) {
+        ID_PROPOSTA = id;
+        TITULO = titulo;
+        OBJETIVO = objetivo;
+        Professor = professor;
     }
 
-    public String getTitulo() {
-        return Titulo;
+    public String getID_PROPOSTA() {
+        return ID_PROPOSTA;
     }
 
-    public void setTitulo(String titulo) {
-        Titulo = titulo;
+    public void setID_PROPOSTA(String ID_PROPOSTA) {
+        this.ID_PROPOSTA = ID_PROPOSTA;
     }
 
-    public String getCriado() {
-        return Criado;
+    public String getTITULO() {
+        return TITULO;
     }
 
-    public void setCriado(String criado) {
-        Criado = criado;
+    public void setTITULO(String TITULO) {
+        this.TITULO = TITULO;
     }
 
-    public String getObjetivo() {
-        return Objetivo;
+    public String getOBJETIVO() {
+        return OBJETIVO;
     }
 
-    public void setObjetivo(String objetivo) {
-        Objetivo = objetivo;
+    public void setOBJETIVO(String OBJETIVO) {
+        this.OBJETIVO = OBJETIVO;
+    }
+
+    public com.example.vitu.projetotese.model.Professor getProfessor() {
+        return Professor;
+    }
+
+    public void setProfessor(com.example.vitu.projetotese.model.Professor professor) {
+        Professor = professor;
     }
 }
