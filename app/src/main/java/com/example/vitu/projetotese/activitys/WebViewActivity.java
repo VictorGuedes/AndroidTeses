@@ -16,14 +16,14 @@ public class WebViewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_view);
-        String URL = PropostasEndpoint.URL_BASE;
+        //String URL = PropostasEndpoint.URL_BASE;
 
         Bundle extra = getIntent().getExtras();
         if(extra != null){
             String id = extra.getString("idProposta");
-            URL = URL + "Proposta/" + id;
+            //URL = URL + "Proposta/" + id;
         }else{
-            URL = "https://google.com";
+            //URL = "https://google.com";
         }
 
         webView = (WebView) findViewById(R.id.Webview_id);
@@ -37,7 +37,7 @@ public class WebViewActivity extends AppCompatActivity {
         webView.getSettings().setAppCacheEnabled(true);
         webView.setScrollBarStyle(WebView.SCROLLBARS_INSIDE_OVERLAY);
 
-        webView.loadUrl(URL);
+        //webView.loadUrl(URL);
         webView.setWebViewClient(new WebViewClient());
     }
 

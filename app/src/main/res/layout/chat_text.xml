@@ -16,7 +16,7 @@
         android:maxEms="14"
         android:padding="5dp"
         android:text="jdoasjdasjdoisajdioajsdjaosidoi"
-        android:textColor="@android:color/primary_text_light"
+        android:textColor="@color/cardview_dark_background"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginLeft="8dp" />
 

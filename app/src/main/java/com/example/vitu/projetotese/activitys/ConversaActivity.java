@@ -31,7 +31,6 @@ public class ConversaActivity extends AppCompatActivity implements View.OnClickL
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_GALLEY_CAPTURE = 2;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

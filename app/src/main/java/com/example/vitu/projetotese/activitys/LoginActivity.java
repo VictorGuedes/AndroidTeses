@@ -17,8 +17,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         botaoLogin = (Button) findViewById(R.id.entrar_logar);
+
     }
 
     public void cliBotao(View view) {

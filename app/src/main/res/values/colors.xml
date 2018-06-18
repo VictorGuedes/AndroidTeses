@@ -7,4 +7,7 @@
     <color name="colorFabAnexo">#2196F3</color>
     <color name="colorFabPhoto">#fb0000</color>
     <color name="colorFabGaleria">#dfdc00</color>
+
+    <color name="colorGrayBack">#e4e4e4</color>
+    <color name ="colorLightPurpleIpb">#914475</color>
 </resources>

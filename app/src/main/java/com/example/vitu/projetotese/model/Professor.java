@@ -17,4 +17,5 @@ public class Professor {
     public void setNOME_COMPLETO(String NOME_COMPLETO) {
         this.NOME_COMPLETO = NOME_COMPLETO;
     }
+
 }

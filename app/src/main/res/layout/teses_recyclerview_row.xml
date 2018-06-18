@@ -22,16 +22,10 @@
             android:layout_height="wrap_content"
             android:text="Título do Projeto"
             android:layout_margin="10dp"
-            android:textSize="20dp"/>
+            android:textSize="20dp"
+            android:textColor="@color/colorLightPurpleIpb"
+            />
 
-        <TextView
-            android:id="@+id/criador_tese_card_row"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:textSize="16dp"
-
-            android:text="Orientador"/>
 
         <View
             android:layout_width="match_parent"
@@ -45,6 +39,15 @@
             android:text="Objetivo"
             android:layout_margin="10dp"
             android:textSize="16dp"/>
+
+        <TextView
+        android:id="@+id/criador_tese_card_row"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:textSize="16dp"
+
+        android:text="Orientador"/>
     </LinearLayout>
 
 

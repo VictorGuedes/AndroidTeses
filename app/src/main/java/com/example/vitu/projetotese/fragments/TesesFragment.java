@@ -3,8 +3,10 @@ package com.example.vitu.projetotese.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -19,8 +21,9 @@ import com.example.vitu.projetotese.R;
 import com.example.vitu.projetotese.activitys.PropostaActivity;
 import com.example.vitu.projetotese.activitys.WebViewActivity;
 import com.example.vitu.projetotese.adapters.TesesRecyclerViewAdapter;
+import com.example.vitu.projetotese.app.App;
 import com.example.vitu.projetotese.endpoints.PropostasEndpoint;
-import com.example.vitu.projetotese.model.Proposta;
+import com.example.vitu.projetotese.model.PropostaSubmetida;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,63 +31,42 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
-/**
- * A simple {@link Fragment} subclass.
- */
+
 public class TesesFragment extends Fragment {
 
-    private ArrayList<Proposta> propostas;
+    private ArrayList<PropostaSubmetida> propostas;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     public TesesFragment() {}
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_teses, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        final RecyclerView recyclerView = view.findViewById(R.id.recyclerView_teses);
+
+        final RecyclerView recyclerView = view.findViewById(R.id.recyclerView_fragment_teses);
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
+        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayoutTeses);
+        swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
+        swipeRefreshLayout.setRefreshing(true);
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(PropostasEndpoint.URL_BASE)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        final Call<List<PropostaSubmetida>> requestPropostas = App.getRestClient().getPropostasEndpoint().listarPropostas();
+        getPropostas(requestPropostas, recyclerView);
 
-        PropostasEndpoint service = retrofit.create(PropostasEndpoint.class);
-        Call<List<Proposta>> requestPropostas = service.listarPropostas();
 
-        requestPropostas.enqueue(new Callback<List<Proposta>>() {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            public void onResponse(Call<List<Proposta>> call, Response<List<Proposta>> response) {
-                if(!response.isSuccessful()){
-                    //COLOCAR IMAGEM TRISTE NO FUNDO DA TELA CASO NÃO TENHA NET
-                    Log.i("TAG", "Erro " + response.code());
-                }else {
-
-                    List<Proposta> teses = response.body();
-                    propostas = new ArrayList<>();
-                    propostas.addAll(teses);
-
-                    RecyclerView.Adapter adapter = new TesesRecyclerViewAdapter(propostas);
-                    recyclerView.setAdapter(adapter);
-                }
-            }
-            @Override
-            public void onFailure(Call<List<Proposta>> call, Throwable t) {
-                //COLOCAR IMAGEM TRISTE NO FUNDO DA TELA CASO NÃO TENHA NET
-                Log.i("TAG_ERRO", t.getMessage());
+            public void onRefresh() {
+                getPropostas(requestPropostas, recyclerView);
             }
         });
 
@@ -111,7 +93,6 @@ public class TesesFragment extends Fragment {
                     intent.putExtra("idDescricao", propostas.get(position).getDESCRICAO_ADICIONAL());
                     intent.putExtra("idMetodologia", propostas.get(position).getMETODOLOGIA());
                     intent.putExtra("idRecursos", propostas.get(position).getRECURSOS_NECESSARIOS());
-
                     startActivity(intent);
                 }
                 return false;
@@ -119,7 +100,6 @@ public class TesesFragment extends Fragment {
 
             @Override
             public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-
             }
 
             @Override
@@ -128,4 +108,33 @@ public class TesesFragment extends Fragment {
             }
         });
     }
+
+    private void getPropostas(Call<List<PropostaSubmetida>> requestPropostas, final RecyclerView recyclerView){
+        requestPropostas.clone().enqueue(new Callback<List<PropostaSubmetida>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<PropostaSubmetida>> call, @NonNull Response<List<PropostaSubmetida>> response) {
+                if(!response.isSuccessful()){
+                    //COLOCAR IMAGEM TRISTE NO FUNDO DA TELA CASO NÃO TENHA NET
+                    Log.i("TAG", "Erro " + response.code());
+                }else {
+
+                    List<PropostaSubmetida> teses = response.body();
+                    propostas = new ArrayList<>();
+                    propostas.addAll(teses);
+
+                    RecyclerView.Adapter adapter = new TesesRecyclerViewAdapter(propostas);
+                    recyclerView.setAdapter(adapter);
+                    swipeRefreshLayout.setRefreshing(false);
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<PropostaSubmetida>> call, @NonNull Throwable t) {
+                //COLOCAR IMAGEM TRISTE NO FUNDO DA TELA CASO NÃO TENHA NET
+                Log.i("TAG_ERRO", t.getMessage());
+            }
+        });
+    }
+
+
 }

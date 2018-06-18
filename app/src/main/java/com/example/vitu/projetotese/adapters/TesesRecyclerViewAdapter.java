@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.vitu.projetotese.R;
-import com.example.vitu.projetotese.model.Proposta;
+import com.example.vitu.projetotese.model.PropostaSubmetida;
 
 import java.util.ArrayList;
 
@@ -16,9 +16,9 @@ import java.util.ArrayList;
  */
 
 public class TesesRecyclerViewAdapter extends RecyclerView.Adapter<TesesRecyclerViewAdapter.ViewHolder> {
-    private ArrayList<Proposta> propostas;
+    private ArrayList<PropostaSubmetida> propostas;
 
-    public TesesRecyclerViewAdapter(ArrayList<Proposta> propostas){
+    public TesesRecyclerViewAdapter(ArrayList<PropostaSubmetida> propostas){
         this.propostas = propostas;
     }
 
@@ -31,7 +31,7 @@ public class TesesRecyclerViewAdapter extends RecyclerView.Adapter<TesesRecycler
     @Override
     public void onBindViewHolder(TesesRecyclerViewAdapter.ViewHolder holder, int position) {
         holder.titulo.setText(propostas.get(position).getTITULO());
-        holder.criador.setText(propostas.get(position).getProfessor().getNOME_COMPLETO());
+        //holder.criador.setText(propost.get(position).getProfessor().getNOME_COMPLETO());
         holder.objetivo.setText(propostas.get(position).getOBJETIVO());
     }
 

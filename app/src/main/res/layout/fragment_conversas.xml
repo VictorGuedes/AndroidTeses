@@ -4,6 +4,14 @@
     android:layout_height="match_parent"
     tools:context="com.example.vitu.projetotese.fragments.ConversasFragment">
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView_lista_conversas_pessoas"
+        android:scrollbars="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </android.support.v7.widget.RecyclerView>
+
+    <!--
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -14,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Activity conversa"/>
-    </LinearLayout>
+    </LinearLayout> !-->
 
 
 </FrameLayout>
