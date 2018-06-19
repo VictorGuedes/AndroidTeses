@@ -1,16 +1,23 @@
 package com.example.vitu.projetotese.endpoints;
 
-public interface LoginEndpoint {
-    /*
-    @POST("/posts")
-    @FormUrlEncoded
-    Call<Post> savePost(@Field("title") String title,
-                        @Field("body") String body,
-                        @Field("userId") long userId);
-    */
 
-    /*
-    *   @POST("/loginsaya")
-    Call<ListFaqModel> postLogin(@Query("email") String username, @Query("password") String password)
-    * */
+import com.example.vitu.projetotese.model.ResponseToken;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.http.Body;
+
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.POST;
+
+public interface LoginEndpoint {
+
+    @FormUrlEncoded
+    @POST("Token")
+    Call<ResponseToken> retornarUserToken(@Field("grant_type") String grant_type,
+                                          @Field("username") String username,
+                                          @Field("password") String password);
+
 }

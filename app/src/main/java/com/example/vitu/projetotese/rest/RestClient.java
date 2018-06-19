@@ -1,5 +1,6 @@
 package com.example.vitu.projetotese.rest;
 
+import com.example.vitu.projetotese.endpoints.LoginEndpoint;
 import com.example.vitu.projetotese.endpoints.PropostasEndpoint;
 
 import retrofit2.Retrofit;
@@ -10,12 +11,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class RestClient {
-
     private Retrofit retrofit;
 
     public RestClient()
     {
-        String URL_BASE = "http://192.168.43.249:51883/api/";
+        //Celular
+        //String URL_BASE = "http://192.168.43.249:51883/api/";
+
+        //Casa
+        String URL_BASE = "http://192.168.1.68:51883/api/";
         retrofit = new Retrofit.Builder()
                 .baseUrl(URL_BASE)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -24,6 +28,10 @@ public class RestClient {
 
     public PropostasEndpoint getPropostasEndpoint() {
         return retrofit.create(PropostasEndpoint.class);
+    }
+
+    public LoginEndpoint getTokenEndpoint(){
+        return retrofit.create(LoginEndpoint.class);
     }
 
 }

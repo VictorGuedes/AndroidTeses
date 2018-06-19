@@ -2,6 +2,7 @@ package com.example.vitu.projetotese.model;
 
 public class User {
 
+    private String Id;
     private String EMAIL;
     private String PASSWORD;
     private String TOKEN;
