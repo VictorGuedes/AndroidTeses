@@ -1,5 +1,6 @@
 package com.example.vitu.projetotese.activitys;
 
+import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -13,10 +14,18 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.vitu.projetotese.DAO.AppDatabase;
+import com.example.vitu.projetotese.DAO.UserDAO;
 import com.example.vitu.projetotese.MainActivity;
 import com.example.vitu.projetotese.R;
 import com.example.vitu.projetotese.app.App;
 import com.example.vitu.projetotese.model.ResponseToken;
+import com.example.vitu.projetotese.model.User;
+import com.example.vitu.projetotese.model.UserBanco;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -60,12 +69,12 @@ public class LoginActivity extends AppCompatActivity {
                         toast.setGravity(Gravity.CENTER, 0, 0);
                         toast.show();
                     }else{
-                        progressBar.setVisibility(View.INVISIBLE);
                         ResponseToken responseToken = response.body();
-                        Log.i("Sucesso",
+                        Log.i("Insert",
                             responseToken.getAccess_token()
                             + "\n" + responseToken.getUserName());
 
+                        gravarUser(responseToken.getAccess_token());
                     }
                 }
 
@@ -78,8 +87,60 @@ public class LoginActivity extends AppCompatActivity {
                 }
             });
         }
-
-        //startActivity(new Intent(this, MainActivity.class));
-        //finish();
     }
+
+
+    public void gravarUser(final String token){
+
+        Call<User> requestUserInfo = App.getRestClient().getTokenEndpoint().retornarUserInfo("Bearer " + token);
+
+        requestUserInfo.clone().enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
+                if(!response.isSuccessful()){
+                    progressBar.setVisibility(View.INVISIBLE);
+                    toast = Toast.makeText(LoginActivity.this, "Erro ao criar Usuario local", Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
+                }else {
+                    User responseUser = response.body();
+                    UserBanco userBanco = new UserBanco();
+                    if(responseUser != null){
+                        AppDatabase database = Room.databaseBuilder(LoginActivity.this, AppDatabase.class, "user")
+                                .allowMainThreadQueries()
+                                .build();
+                        UserDAO userDAO = database.getUserDAO();
+
+                        userBanco.setId(responseUser.getId());
+                        userBanco.setEMAIL(responseUser.getEmail());
+                        userBanco.setToken("Bearer " + token);
+                        Calendar tokenExpiracao = Calendar.getInstance();
+                        tokenExpiracao.add(Calendar.DATE, +60);
+                        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+                        userBanco.setDataExpiracaoToken(formato.format(tokenExpiracao.getTime()));
+
+                        userDAO.insert(userBanco);
+
+                        Log.i("Insert",
+                                userBanco.getId() + "\n"
+                                        + userBanco.getEMAIL() + "\n"
+                                        + userBanco.getToken() + "\n"
+                                        + userBanco.getDataExpiracaoToken());
+                    }
+
+                    progressBar.setVisibility(View.INVISIBLE);
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<User> call, @NonNull Throwable t) {
+                progressBar.setVisibility(View.INVISIBLE);
+                toast = Toast.makeText(LoginActivity.this, t.getMessage(), Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
+            }
+        });
+    }
+
 }

@@ -1,21 +1,21 @@
 package com.example.vitu.projetotese.model;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+
 /**
  * Created by vitu on 04/05/2018.
  */
 
+@Entity(tableName = "Professor")
 public class Professor {
 
-    private String NOME_COMPLETO;
+    @PrimaryKey
+    private String Id;
+    private String nome;
 
-    public Professor(){}
 
-    public String getNOME_COMPLETO() {
-        return NOME_COMPLETO;
+    public String getNome() {
+        return nome;
     }
-
-    public void setNOME_COMPLETO(String NOME_COMPLETO) {
-        this.NOME_COMPLETO = NOME_COMPLETO;
-    }
-
 }
