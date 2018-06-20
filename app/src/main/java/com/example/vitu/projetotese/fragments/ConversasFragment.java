@@ -97,6 +97,7 @@ public class ConversasFragment extends Fragment {
                     Intent intent = new Intent(getActivity(), ConversaActivity.class);
                     intent.putExtra("idUser", userId);
                     intent.putExtra("tokenUser", userToken);
+                    intent.putExtra("idChat", conversas.get(position).getId_messsenger());
                     startActivity(intent);
                 }
                 return false;

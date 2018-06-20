@@ -88,15 +88,8 @@ public class TesesFragment extends Fragment {
                 View child = rv.findChildViewUnder(e.getX(), e.getY());
                 if(child != null && gestureDetector.onTouchEvent(e)) {
                     int position = rv.getChildAdapterPosition(child);
-                    Intent intent = new Intent(getActivity(), PropostaActivity.class);
-                    intent.putExtra("idProposta", propostas.get(position).getID_PROPOSTA());
-                    intent.putExtra("idInstituicao", propostas.get(position).getINSTITUICAO_TRABALHO());
-                    intent.putExtra("idTitulo", propostas.get(position).getTITULO());
-                    intent.putExtra("idPalavraChave", propostas.get(position).getPALAVRA_CHAVE());
-                    intent.putExtra("idObjetivo", propostas.get(position).getOBJETIVO());
-                    intent.putExtra("idDescricao", propostas.get(position).getDESCRICAO_ADICIONAL());
-                    intent.putExtra("idMetodologia", propostas.get(position).getMETODOLOGIA());
-                    intent.putExtra("idRecursos", propostas.get(position).getRECURSOS_NECESSARIOS());
+                    Intent intent = new Intent(getActivity(), WebViewActivity.class);
+                    intent.putExtra("idProposta", propostas.get(position).getId_proposta_submetida());
                     startActivity(intent);
                 }
                 return false;

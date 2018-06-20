@@ -30,9 +30,9 @@ public class TesesRecyclerViewAdapter extends RecyclerView.Adapter<TesesRecycler
 
     @Override
     public void onBindViewHolder(TesesRecyclerViewAdapter.ViewHolder holder, int position) {
-        holder.titulo.setText(propostas.get(position).getTITULO());
+        holder.titulo.setText(propostas.get(position).getTitulo());
         //holder.criador.setText(propost.get(position).getProfessor().getNOME_COMPLETO());
-        holder.objetivo.setText(propostas.get(position).getOBJETIVO());
+        holder.objetivo.setText(propostas.get(position).getObjetivo());
     }
 
     @Override

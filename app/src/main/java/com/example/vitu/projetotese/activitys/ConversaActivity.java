@@ -30,6 +30,9 @@ public class ConversaActivity extends AppCompatActivity implements View.OnClickL
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_GALLEY_CAPTURE = 2;
+    private String idUser;
+    private String tokenUser;
+    private String idChat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +40,12 @@ public class ConversaActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_conversa);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        Bundle extra = getIntent().getExtras();
+        if(extra != null) {
+            idUser = extra.getString("idUser");
+            tokenUser = extra.getString("tokenUser");
+            idChat = extra.getString("idChat");
+        }
 
         textoMensagem = (EditText) findViewById(R.id.edit_text_mensagem);
         fab = (FloatingActionButton) findViewById(R.id.fabOpen);

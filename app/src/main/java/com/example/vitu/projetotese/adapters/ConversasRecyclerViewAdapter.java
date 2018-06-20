@@ -30,6 +30,7 @@ public class ConversasRecyclerViewAdapter extends RecyclerView.Adapter<Conversas
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.titutoConversa.setText(chats.get(position).getTitulo());
+        holder.alunoResponsavel.setText("Aluno: " + chats.get(position).getNome());
     }
 
     @Override
@@ -39,10 +40,12 @@ public class ConversasRecyclerViewAdapter extends RecyclerView.Adapter<Conversas
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         private TextView titutoConversa;
+        private TextView alunoResponsavel;
 
         public ViewHolder(View itemView) {
             super(itemView);
             titutoConversa = (TextView) itemView.findViewById(R.id.titulo_tese_card_row);
+            alunoResponsavel = (TextView) itemView.findViewById(R.id.aluno_tese_card_row);
         }
     }
 

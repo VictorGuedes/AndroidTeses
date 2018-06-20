@@ -16,14 +16,14 @@ public class WebViewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_view);
-        //String URL = PropostasEndpoint.URL_BASE;
+        String URL = "http://192.168.43.249:51883/api/";
 
         Bundle extra = getIntent().getExtras();
         if(extra != null){
             String id = extra.getString("idProposta");
-            //URL = URL + "Proposta/" + id;
+            URL = URL + "PropostaSubmetidas/" + id;
         }else{
-            //URL = "https://google.com";
+            URL = "https://google.com";
         }
 
         webView = (WebView) findViewById(R.id.Webview_id);

@@ -8,6 +8,7 @@ public class Chat {
     private String titulo;
     private List<Aluno> Aluno;
     private List<Professor> Professor;
+    private String nome;
 
     public String getId_messsenger() {
         return id_messsenger;
@@ -23,5 +24,9 @@ public class Chat {
 
     public List<com.example.vitu.projetotese.model.Professor> getProfessor() {
         return Professor;
+    }
+
+    public String getNome() {
+        return nome;
     }
 }

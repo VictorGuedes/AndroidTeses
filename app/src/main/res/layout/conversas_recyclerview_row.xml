@@ -12,27 +12,44 @@
     android:clickable="true"
     android:foreground="?android:attr/selectableItemBackground">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
         <ImageView
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/ic_launcher"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            android:id="@+id/imageView3" />
 
         <TextView
             android:id="@+id/titulo_tese_card_row"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="21dp"
+            android:layout_marginStart="21dp"
+            android:layout_marginTop="12dp"
+            android:layout_toEndOf="@+id/imageView3"
+            android:layout_toRightOf="@+id/imageView3"
             android:text="Título"
             android:textColor="@color/colorLightPurpleIpb"
-            android:layout_margin="20dp"
             android:textSize="21dp" />
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/aluno_tese_card_row"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/titulo_tese_card_row"
+            android:layout_alignStart="@+id/titulo_tese_card_row"
+            android:layout_below="@+id/titulo_tese_card_row"
+            android:text="Aluno:"
+            android:textColor="@color/colorLightPurpleIpb"
+            android:textSize="15dp" />
+    </RelativeLayout>
 
 
 
