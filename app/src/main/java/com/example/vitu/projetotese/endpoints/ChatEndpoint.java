@@ -7,12 +7,13 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
+import retrofit2.http.Path;
 
 public interface ChatEndpoint {
 
-    public static final String URL_BASE="http://192.168.1.68:55708/api/";
 
-    @GET("chatConversa")
-    Call<List<Chat>> listarChats();
+    @GET("Messenger/{idUser}")
+    Call<List<Chat>> listarChatsUser(@Path("idUser") String idUser, @Header("Authorization") String BearerToken);
 
 }

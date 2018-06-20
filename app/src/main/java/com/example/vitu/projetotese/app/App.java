@@ -1,7 +1,9 @@
 package com.example.vitu.projetotese.app;
 
 import android.app.Application;
+import android.arch.persistence.room.Room;
 
+import com.example.vitu.projetotese.DAO.AppDatabase;
 import com.example.vitu.projetotese.rest.RestClient;
 
 /**
@@ -11,12 +13,16 @@ import com.example.vitu.projetotese.rest.RestClient;
 public class App extends Application {
 
     private static RestClient restClient;
+    private static AppDatabase database;
 
     @Override
     public void onCreate()
     {
         super.onCreate();
         restClient = new RestClient();
+        database = Room.databaseBuilder(this, AppDatabase.class, "user")
+                .allowMainThreadQueries()
+                .build();
     }
 
     public static RestClient getRestClient()
@@ -24,4 +30,5 @@ public class App extends Application {
         return restClient;
     }
 
+    public static AppDatabase getDatabase(){return database;}
 }

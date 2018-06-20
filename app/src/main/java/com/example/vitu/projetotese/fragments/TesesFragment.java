@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.vitu.projetotese.DAO.UserDAO;
 import com.example.vitu.projetotese.R;
 import com.example.vitu.projetotese.activitys.PropostaActivity;
 import com.example.vitu.projetotese.activitys.WebViewActivity;
@@ -59,7 +60,10 @@ public class TesesFragment extends Fragment {
         swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
         swipeRefreshLayout.setRefreshing(true);
 
-        final Call<List<PropostaSubmetida>> requestPropostas = App.getRestClient().getPropostasEndpoint().listarPropostas();
+        UserDAO userDAO = App.getDatabase().getUserDAO();
+        String token = userDAO.getLogedUser().getToken();
+
+        final Call<List<PropostaSubmetida>> requestPropostas = App.getRestClient().getPropostasEndpoint().listarPropostas(token);
         getPropostas(requestPropostas, recyclerView);
 
 

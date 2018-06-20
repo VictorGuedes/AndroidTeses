@@ -12,7 +12,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
+import com.example.vitu.projetotese.DAO.UserDAO;
+import com.example.vitu.projetotese.app.App;
 import com.example.vitu.projetotese.fragments.ConversasFragment;
 import com.example.vitu.projetotese.fragments.TesesFragment;
 import com.example.vitu.projetotese.utils.Alerts;
@@ -42,6 +45,10 @@ public class MainActivity extends AppCompatActivity
                 .replace(R.id.fragmentPrincipal, fr)
                 .commit();
 
+        //UserDAO userDAO = App.getDatabase().getUserDAO();
+        //TextView emailUser = (TextView) findViewById(R.id.email_user);
+        //String email = userDAO.getLogedUser().getEMAIL();
+        //emailUser.setText(email);
     }
 
     @Override
@@ -65,10 +72,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        } else if (id == R.id.action_filtro_tese){
-            Alerts.criarAlertComMultiplaEscolha(this, R.string.filtroPropostas);
+        if (id == R.id.action_logout) {
             return true;
         }
 

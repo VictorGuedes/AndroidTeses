@@ -10,9 +10,7 @@ public class Aluno {
     private String Id;
     private String nome;
 
-    public String getNOME() {
+    public String getNome() {
         return nome;
     }
-
-
 }

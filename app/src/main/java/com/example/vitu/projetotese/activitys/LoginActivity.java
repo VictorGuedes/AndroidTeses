@@ -106,10 +106,11 @@ public class LoginActivity extends AppCompatActivity {
                     User responseUser = response.body();
                     UserBanco userBanco = new UserBanco();
                     if(responseUser != null){
-                        AppDatabase database = Room.databaseBuilder(LoginActivity.this, AppDatabase.class, "user")
+                        /*AppDatabase database = Room.databaseBuilder(LoginActivity.this, AppDatabase.class, "user")
                                 .allowMainThreadQueries()
                                 .build();
-                        UserDAO userDAO = database.getUserDAO();
+                        UserDAO userDAO = database.getUserDAO();*/
+                        UserDAO userDAO = App.getDatabase().getUserDAO();
 
                         userBanco.setId(responseUser.getId());
                         userBanco.setEMAIL(responseUser.getEmail());
@@ -120,16 +121,9 @@ public class LoginActivity extends AppCompatActivity {
                         userBanco.setDataExpiracaoToken(formato.format(tokenExpiracao.getTime()));
 
                         userDAO.insert(userBanco);
-
-                        Log.i("Insert",
-                                userBanco.getId() + "\n"
-                                        + userBanco.getEMAIL() + "\n"
-                                        + userBanco.getToken() + "\n"
-                                        + userBanco.getDataExpiracaoToken());
+                        progressBar.setVisibility(View.INVISIBLE);
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     }
-
-                    progressBar.setVisibility(View.INVISIBLE);
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 }
             }
 

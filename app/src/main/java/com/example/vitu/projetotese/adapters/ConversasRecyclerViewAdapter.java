@@ -13,17 +13,37 @@ import com.example.vitu.projetotese.model.Chat;
 import java.util.ArrayList;
 
 
-public class ConversasRecyclerViewAdapter {
+public class ConversasRecyclerViewAdapter extends RecyclerView.Adapter<ConversasRecyclerViewAdapter.ViewHolder> {
 
     private ArrayList<Chat> chats;
 
-    public ConversasRecyclerViewAdapter(ArrayList<Chat> chats) {
+    public ConversasRecyclerViewAdapter(ArrayList<Chat> chats){
         this.chats = chats;
     }
 
-    /*
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.conversas_recyclerview_row, parent, false);
+        return new ViewHolder(view);
+    }
 
-         Falta ViewHolder adapter Recycler view
-    */
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        holder.titutoConversa.setText(chats.get(position).getTitulo());
+    }
+
+    @Override
+    public int getItemCount() {
+        return chats.size();
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder{
+        private TextView titutoConversa;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            titutoConversa = (TextView) itemView.findViewById(R.id.titulo_tese_card_row);
+        }
+    }
 
 }

@@ -5,6 +5,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 
 /**
  * Created by vitu on 04/05/2018.
@@ -13,6 +14,6 @@ import retrofit2.http.GET;
 public interface PropostasEndpoint {
 
     @GET("PropostaSubmetidas")
-    Call<List<PropostaSubmetida>> listarPropostas();
+    Call<List<PropostaSubmetida>> listarPropostas(@Header("Authorization") String BearerToken);
 
 }

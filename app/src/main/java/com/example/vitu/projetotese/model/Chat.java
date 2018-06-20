@@ -1,30 +1,27 @@
 package com.example.vitu.projetotese.model;
 
+import java.util.List;
+
 public class Chat {
 
-    private String ID_CHAT_CONVERSAS;
-    private PropostaSubmetida proposta;
+    private String id_messsenger;
+    private String titulo;
+    private List<Aluno> Aluno;
+    private List<Professor> Professor;
 
-    public Chat(String ID_CHAT_CONVERSAS, PropostaSubmetida proposta) {
-        this.ID_CHAT_CONVERSAS = ID_CHAT_CONVERSAS;
-        this.proposta = proposta;
-
+    public String getId_messsenger() {
+        return id_messsenger;
     }
 
-    public String getID_CHAT_CONVERSAS() {
-        return ID_CHAT_CONVERSAS;
+    public String getTitulo() {
+        return titulo;
     }
 
-    public void setID_CHAT_CONVERSAS(String ID_CHAT_CONVERSAS) {
-        this.ID_CHAT_CONVERSAS = ID_CHAT_CONVERSAS;
+    public List<com.example.vitu.projetotese.model.Aluno> getAluno() {
+        return Aluno;
     }
 
-    public PropostaSubmetida getProposta() {
-        return proposta;
+    public List<com.example.vitu.projetotese.model.Professor> getProfessor() {
+        return Professor;
     }
-
-    public void setProposta(PropostaSubmetida proposta) {
-        this.proposta = proposta;
-    }
-
 }

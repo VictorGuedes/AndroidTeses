@@ -20,7 +20,7 @@ public interface UserDAO {
     @Delete
     public void delete(UserBanco contact);
 
-    @Query("SELECT * FROM User WHERE Id = :id")
-    public UserBanco getLoginUser(String id);
+    @Query("SELECT * FROM User")
+    public UserBanco getLogedUser();
 
 }
