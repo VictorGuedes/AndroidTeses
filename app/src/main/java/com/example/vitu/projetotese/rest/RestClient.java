@@ -21,6 +21,9 @@ public class RestClient {
 
         //Casa
         //String URL_BASE = "http://192.168.1.68:51883/api/";
+
+        //IPB
+        //String URL_BASE = "http://194.210.89.92:51883/api/";
         retrofit = new Retrofit.Builder()
                 .baseUrl(URL_BASE)
                 .addConverterFactory(GsonConverterFactory.create())

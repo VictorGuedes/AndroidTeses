@@ -19,7 +19,15 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.vitu.projetotese.R;
+import com.example.vitu.projetotese.model.ItemChat;
 import com.example.vitu.projetotese.utils.Permissoes;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class ConversaActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -33,6 +41,7 @@ public class ConversaActivity extends AppCompatActivity implements View.OnClickL
     private String idUser;
     private String tokenUser;
     private String idChat;
+    private FirebaseFirestore firebaseFirestore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +49,8 @@ public class ConversaActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_conversa);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        firebaseFirestore = FirebaseFirestore.getInstance();
         Bundle extra = getIntent().getExtras();
         if(extra != null) {
             idUser = extra.getString("idUser");
@@ -153,8 +164,25 @@ public class ConversaActivity extends AppCompatActivity implements View.OnClickL
                 break;
 
             case R.id.fabEnviar:
-                Toast.makeText(this, "Enviar", Toast.LENGTH_SHORT).show();
+                enviarMensagem();
         }
+    }
+
+    private void enviarMensagem(){
+        Calendar dataAtual = Calendar.getInstance();
+        SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy");
+        ItemChat itemChat = new ItemChat(textoMensagem.getText().toString(), formato.format(dataAtual.getTime()), idUser);
+        firebaseFirestore.collection("chats")
+                .document(idChat)
+                .collection("mensagens")
+                .document()
+                .set(itemChat)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(ConversaActivity.this, "Mandou;", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
 
