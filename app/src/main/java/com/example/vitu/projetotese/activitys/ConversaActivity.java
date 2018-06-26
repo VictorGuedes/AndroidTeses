@@ -9,9 +9,12 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -19,15 +22,24 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.vitu.projetotese.R;
+import com.example.vitu.projetotese.adapters.ChatAtualAdapter;
 import com.example.vitu.projetotese.model.ItemChat;
 import com.example.vitu.projetotese.utils.Permissoes;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+
+import javax.annotation.Nullable;
 
 public class ConversaActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -38,10 +50,10 @@ public class ConversaActivity extends AppCompatActivity implements View.OnClickL
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_GALLEY_CAPTURE = 2;
-    private String idUser;
-    private String tokenUser;
-    private String idChat;
+    private String idUser, emailUser, idChat;
     private FirebaseFirestore firebaseFirestore;
+    private RecyclerView recyclerView;
+    private ChatAtualAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,8 +66,8 @@ public class ConversaActivity extends AppCompatActivity implements View.OnClickL
         Bundle extra = getIntent().getExtras();
         if(extra != null) {
             idUser = extra.getString("idUser");
-            tokenUser = extra.getString("tokenUser");
             idChat = extra.getString("idChat");
+            emailUser = extra.getString("emailUser");
         }
 
         textoMensagem = (EditText) findViewById(R.id.edit_text_mensagem);
@@ -99,6 +111,37 @@ public class ConversaActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void afterTextChanged(Editable s) {}
         });
+
+        recyclerView = findViewById(R.id.recyclerView_conversa);
+        recyclerView.setHasFixedSize(true);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+
+        firebaseFirestore.collection("chats")
+                .document(idChat)
+                .collection("mensagens")
+                .orderBy("data")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                        if(e != null){
+                            Log.i("Fire", "erro: ", e);
+                            return;
+                        }
+                        List<ItemChat> itens = new ArrayList<>();
+                        for (DocumentSnapshot doc : queryDocumentSnapshots) {
+                            ItemChat itemChat = doc.toObject(ItemChat.class);
+                            itemChat.setMensagem(doc.getString("mensagem"));
+                            itemChat.setIdUserSerder(doc.getString("email"));
+                            itemChat.setIdUserSerder(doc.getString("idUserSerder"));
+                            itens.add(itemChat);
+                        }
+
+                        mAdapter = new ChatAtualAdapter(ConversaActivity.this, itens);
+                        recyclerView.setAdapter(mAdapter);
+                    }
+                });
+
     }
 
     private void animationFab(){
@@ -169,20 +212,20 @@ public class ConversaActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void enviarMensagem(){
-        Calendar dataAtual = Calendar.getInstance();
-        SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy");
-        ItemChat itemChat = new ItemChat(textoMensagem.getText().toString(), formato.format(dataAtual.getTime()), idUser);
-        firebaseFirestore.collection("chats")
-                .document(idChat)
-                .collection("mensagens")
-                .document()
-                .set(itemChat)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Toast.makeText(ConversaActivity.this, "Mandou;", Toast.LENGTH_SHORT).show();
-                    }
-                });
+        if(!textoMensagem.getText().toString().isEmpty()){
+            Calendar dataAtual = Calendar.getInstance();
+            //SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy");
+            ItemChat itemChat = new ItemChat(textoMensagem.getText().toString(), dataAtual.getTime().toString(), idUser, emailUser);
+            firebaseFirestore.collection("chats")
+                    .document(idChat)
+                    .collection("mensagens")
+                    .document()
+                    .set(itemChat);
+            textoMensagem.setText("");
+        }else {
+            Toast.makeText(this, "Digite algo", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
 

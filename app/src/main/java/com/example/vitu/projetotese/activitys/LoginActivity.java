@@ -106,10 +106,7 @@ public class LoginActivity extends AppCompatActivity {
                     User responseUser = response.body();
                     UserBanco userBanco = new UserBanco();
                     if(responseUser != null){
-                        /*AppDatabase database = Room.databaseBuilder(LoginActivity.this, AppDatabase.class, "user")
-                                .allowMainThreadQueries()
-                                .build();
-                        UserDAO userDAO = database.getUserDAO();*/
+
                         UserDAO userDAO = App.getDatabase().getUserDAO();
 
                         userBanco.setId(responseUser.getId());

@@ -67,6 +67,7 @@ public class ConversasFragment extends Fragment {
         UserDAO userDAO = App.getDatabase().getUserDAO();
         final String userId = userDAO.getLogedUser().getId();
         final String userToken = userDAO.getLogedUser().getToken();
+        final String userEmail = userDAO.getLogedUser().getEMAIL();
 
 
         final Call<List<Chat>> requestChats = App.getRestClient().getChatEndpoint().listarChatsUser(userId, userToken);
@@ -96,8 +97,8 @@ public class ConversasFragment extends Fragment {
                     int position = rv.getChildAdapterPosition(child);
                     Intent intent = new Intent(getActivity(), ConversaActivity.class);
                     intent.putExtra("idUser", userId);
-                    intent.putExtra("tokenUser", userToken);
                     intent.putExtra("idChat", conversas.get(position).getId_messsenger());
+                    intent.putExtra("emailUser", userEmail);
                     startActivity(intent);
                 }
                 return false;

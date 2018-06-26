@@ -17,10 +17,10 @@ public class RestClient {
     public RestClient()
     {
         //Celular
-        String URL_BASE = "http://192.168.43.249:51883/api/";
+        //String URL_BASE = "http://192.168.43.249:51883/api/";
 
         //Casa
-        //String URL_BASE = "http://192.168.1.68:51883/api/";
+        String URL_BASE = "http://192.168.1.68:51883/api/";
 
         //IPB
         //String URL_BASE = "http://194.210.89.92:51883/api/";
