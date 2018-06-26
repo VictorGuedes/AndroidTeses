@@ -35,26 +35,29 @@
         <activity
             android:name=".activitys.LoginActivity"
             android:theme="@style/AppTheme.YesActionBar">
+
             <!--
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
+            </intent-filter>
+            -->
         </activity>
         <activity android:name=".activitys.WebViewActivity" />
-        <activity android:name=".activitys.PropostaActivity">
-        </activity>
+        <activity android:name=".activitys.PropostaActivity"></activity>
         <activity
             android:name=".activitys.SplachScreenActivity"
             android:theme="@style/SplashTheme">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
+        </activity>
+        <activity
+            android:name=".activitys.PhotoActivity"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>
 

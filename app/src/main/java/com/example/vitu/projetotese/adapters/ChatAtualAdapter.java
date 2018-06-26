@@ -1,6 +1,10 @@
 package com.example.vitu.projetotese.adapters;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,9 +15,11 @@ import android.widget.Toast;
 
 import com.example.vitu.projetotese.DAO.UserDAO;
 import com.example.vitu.projetotese.R;
+import com.example.vitu.projetotese.activitys.PhotoActivity;
 import com.example.vitu.projetotese.app.App;
 import com.example.vitu.projetotese.model.ItemChat;
 import com.example.vitu.projetotese.model.UserBanco;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -23,7 +29,7 @@ import java.util.List;
  * Created by vitu on 20/06/2018.
  */
 
-public class ChatAtualAdapter extends RecyclerView.Adapter {
+public class ChatAtualAdapter extends RecyclerView.Adapter  {
     private List<ItemChat> itensChat;
     private Context context;
     private final int VIEW_TYPE_MESSAGE_SENT = 1;
@@ -31,12 +37,17 @@ public class ChatAtualAdapter extends RecyclerView.Adapter {
     private final int VIEW_TYPE_IMAGE = 3;
     private UserDAO userDAO;
 
+    public interface OnImageClickListener {
+        void onItemClick(int pos, ImageView imageView);
+    }
+
     public ChatAtualAdapter(Context context, List<ItemChat> itensChat){
         this.context = context;
         this.itensChat = itensChat;
         userDAO = App.getDatabase().getUserDAO();
 
     }
+
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -71,8 +82,8 @@ public class ChatAtualAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        ItemChat itemChat = itensChat.get(position);
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
+        final ItemChat itemChat = itensChat.get(position);
 
         switch (holder.getItemViewType()){
             case VIEW_TYPE_MESSAGE_SENT:
@@ -84,9 +95,11 @@ public class ChatAtualAdapter extends RecyclerView.Adapter {
                 break;
 
             case VIEW_TYPE_IMAGE:
-                ((PhotoHolder) holder).bind(itemChat);
+                ((PhotoHolder) holder).bind(itemChat, position);
+                break;
         }
     }
+
 
     @Override
     public int getItemCount() {
@@ -134,17 +147,26 @@ public class ChatAtualAdapter extends RecyclerView.Adapter {
             quemMandou = (TextView) itemView.findViewById(R.id.message_text_quem_enviou3);
         }
 
-        void bind(ItemChat itemChat){
+        void bind(ItemChat itemChat, final int position){
             quemMandou.setText(itemChat.getEmail());
             Picasso.get()
                     .load(itemChat.getMensagem())
                     .fit()
                     .into(imageView);
 
+            ViewCompat.setTransitionName(imageView, itensChat.get(position).getMensagem());
+
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(context, "Ampliar", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(context, PhotoActivity.class );
+                    intent.putExtra("url", itensChat.get(position).getMensagem());
+                    intent.putExtra("img", ViewCompat.getTransitionName(imageView));
+                    ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                            (Activity) context,
+                            imageView,
+                            ViewCompat.getTransitionName(imageView));
+                    context.startActivity(intent, optionsCompat.toBundle());
                 }
             });
         }

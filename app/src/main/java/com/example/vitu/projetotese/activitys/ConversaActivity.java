@@ -128,8 +128,7 @@ public class ConversaActivity extends AppCompatActivity implements View.OnClickL
 
         recyclerView = findViewById(R.id.recyclerView_conversa);
         recyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
+        final RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
 
         firebaseFirestore.collection("chats")
                 .document(idChat)
@@ -151,7 +150,8 @@ public class ConversaActivity extends AppCompatActivity implements View.OnClickL
                             itemChat.setTipo(doc.getString("tipo"));
                             itens.add(itemChat);
                         }
-
+                        layoutManager.scrollToPosition(itens.size() - 1);
+                        recyclerView.setLayoutManager(layoutManager);
                         mAdapter = new ChatAtualAdapter(ConversaActivity.this, itens);
                         recyclerView.setAdapter(mAdapter);
                     }
@@ -324,7 +324,6 @@ public class ConversaActivity extends AppCompatActivity implements View.OnClickL
                     }
                 }
             });
-
         }
 
 
