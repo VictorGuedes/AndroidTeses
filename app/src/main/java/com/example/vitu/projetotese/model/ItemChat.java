@@ -12,14 +12,16 @@ public class ItemChat {
     private String data;
     private String idUserSerder;
     private String email;
+    private String tipo;
 
     public ItemChat(){}
 
-    public ItemChat(String mensagem, String data, String idUserSerder, String email) {
+    public ItemChat(String mensagem, String data, String idUserSerder, String email, String tipo) {
         this.mensagem = mensagem;
         this.data = data;
         this.idUserSerder = idUserSerder;
         this.email = email;
+        this.tipo = tipo;
     }
 
     public String getMensagem() {
@@ -52,5 +54,13 @@ public class ItemChat {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
 }

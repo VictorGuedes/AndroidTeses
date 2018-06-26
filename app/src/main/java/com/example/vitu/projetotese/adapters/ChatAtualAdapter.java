@@ -5,13 +5,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.vitu.projetotese.DAO.UserDAO;
 import com.example.vitu.projetotese.R;
 import com.example.vitu.projetotese.app.App;
 import com.example.vitu.projetotese.model.ItemChat;
 import com.example.vitu.projetotese.model.UserBanco;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +28,7 @@ public class ChatAtualAdapter extends RecyclerView.Adapter {
     private Context context;
     private final int VIEW_TYPE_MESSAGE_SENT = 1;
     private final int VIEW_TYPE_MESSAGE_RECEIVED = 2;
+    private final int VIEW_TYPE_IMAGE = 3;
     private UserDAO userDAO;
 
     public ChatAtualAdapter(Context context, List<ItemChat> itensChat){
@@ -40,10 +44,12 @@ public class ChatAtualAdapter extends RecyclerView.Adapter {
         if(viewType == VIEW_TYPE_MESSAGE_SENT){
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_meu_bolao, parent,false);
             return new ViewHolderSent(view);
-
         } else if(viewType == VIEW_TYPE_MESSAGE_RECEIVED) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_text,parent,false);
             return new ReceivedMessageHolder(view);
+        } else if(viewType == VIEW_TYPE_IMAGE){
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_image_bolao,parent,false);
+            return new PhotoHolder(view);
         }
 
         return null;
@@ -53,7 +59,11 @@ public class ChatAtualAdapter extends RecyclerView.Adapter {
     public int getItemViewType(int position) {
         String idUser = userDAO.getLogedUser().getId();
 
-        if (itensChat.get(position).getIdUserSerder().equals(idUser)){
+        if(itensChat.get(position).getTipo().equals("imagem")){
+            return VIEW_TYPE_IMAGE;
+        }
+
+        if (itensChat.get(position).getIdUserSerder().equals(idUser) ){
             return VIEW_TYPE_MESSAGE_SENT;
         } else {
             return VIEW_TYPE_MESSAGE_RECEIVED;
@@ -71,6 +81,10 @@ public class ChatAtualAdapter extends RecyclerView.Adapter {
 
             case VIEW_TYPE_MESSAGE_RECEIVED:
                 ((ReceivedMessageHolder) holder).bind(itemChat);
+                break;
+
+            case VIEW_TYPE_IMAGE:
+                ((PhotoHolder) holder).bind(itemChat);
         }
     }
 
@@ -108,6 +122,33 @@ public class ChatAtualAdapter extends RecyclerView.Adapter {
             mensagem.setText(itemChat.getMensagem());
             receiver.setText(itemChat.getEmail());
         }
+    }
+
+    private class PhotoHolder extends RecyclerView.ViewHolder {
+        ImageView imageView;
+        TextView quemMandou;
+
+        public PhotoHolder(View itemView) {
+            super(itemView);
+            imageView = (ImageView) itemView.findViewById(R.id.image_chat_bolao);
+            quemMandou = (TextView) itemView.findViewById(R.id.message_text_quem_enviou3);
+        }
+
+        void bind(ItemChat itemChat){
+            quemMandou.setText(itemChat.getEmail());
+            Picasso.get()
+                    .load(itemChat.getMensagem())
+                    .fit()
+                    .into(imageView);
+
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(context, "Ampliar", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
     }
 
 }
