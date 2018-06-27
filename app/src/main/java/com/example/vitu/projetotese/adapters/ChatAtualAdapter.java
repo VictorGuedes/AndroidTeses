@@ -1,8 +1,15 @@
 package com.example.vitu.projetotese.adapters;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.pdf.PdfRenderer;
+import android.net.Uri;
+import android.os.Build;
+import android.os.ParcelFileDescriptor;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
@@ -16,12 +23,19 @@ import android.widget.Toast;
 import com.example.vitu.projetotese.DAO.UserDAO;
 import com.example.vitu.projetotese.R;
 import com.example.vitu.projetotese.activitys.PhotoActivity;
+import com.example.vitu.projetotese.activitys.WebViewDocumento;
 import com.example.vitu.projetotese.app.App;
 import com.example.vitu.projetotese.model.ItemChat;
 import com.example.vitu.projetotese.model.UserBanco;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,17 +49,14 @@ public class ChatAtualAdapter extends RecyclerView.Adapter  {
     private final int VIEW_TYPE_MESSAGE_SENT = 1;
     private final int VIEW_TYPE_MESSAGE_RECEIVED = 2;
     private final int VIEW_TYPE_IMAGE = 3;
+    private final int VIEW_TYPE_DOCUMENT = 4;
     private UserDAO userDAO;
 
-    public interface OnImageClickListener {
-        void onItemClick(int pos, ImageView imageView);
-    }
 
     public ChatAtualAdapter(Context context, List<ItemChat> itensChat){
         this.context = context;
         this.itensChat = itensChat;
         userDAO = App.getDatabase().getUserDAO();
-
     }
 
 
@@ -55,12 +66,18 @@ public class ChatAtualAdapter extends RecyclerView.Adapter  {
         if(viewType == VIEW_TYPE_MESSAGE_SENT){
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_meu_bolao, parent,false);
             return new ViewHolderSent(view);
+
         } else if(viewType == VIEW_TYPE_MESSAGE_RECEIVED) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_text,parent,false);
             return new ReceivedMessageHolder(view);
+
         } else if(viewType == VIEW_TYPE_IMAGE){
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_image_bolao,parent,false);
             return new PhotoHolder(view);
+
+        } else if(viewType == VIEW_TYPE_DOCUMENT){
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_documento,parent,false);
+            return new DocumentoHolder(view);
         }
 
         return null;
@@ -72,6 +89,10 @@ public class ChatAtualAdapter extends RecyclerView.Adapter  {
 
         if(itensChat.get(position).getTipo().equals("imagem")){
             return VIEW_TYPE_IMAGE;
+        }
+
+        if(itensChat.get(position).getTipo().equals("documentos")){
+            return VIEW_TYPE_DOCUMENT;
         }
 
         if (itensChat.get(position).getIdUserSerder().equals(idUser) ){
@@ -96,6 +117,10 @@ public class ChatAtualAdapter extends RecyclerView.Adapter  {
 
             case VIEW_TYPE_IMAGE:
                 ((PhotoHolder) holder).bind(itemChat, position);
+                break;
+
+            case VIEW_TYPE_DOCUMENT:
+                ((DocumentoHolder) holder).bind(itemChat);
                 break;
         }
     }
@@ -167,6 +192,36 @@ public class ChatAtualAdapter extends RecyclerView.Adapter  {
                             imageView,
                             ViewCompat.getTransitionName(imageView));
                     context.startActivity(intent, optionsCompat.toBundle());
+                }
+            });
+        }
+
+    }
+
+    private class DocumentoHolder extends RecyclerView.ViewHolder{
+
+        TextView quemMandou;
+
+        public DocumentoHolder(View itemView) {
+            super(itemView);
+            quemMandou = (TextView) itemView.findViewById(R.id.message_text_quem_enviou4);
+
+        }
+
+        void bind(final ItemChat itemChat){
+            quemMandou.setText(itemChat.getEmail());
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setDataAndType(Uri.parse(itemChat.getMensagem()), "application/pdf");
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    Intent newIntent = Intent.createChooser(intent, "Open File");
+                    try {
+                        context.startActivity(newIntent);
+                    } catch (ActivityNotFoundException e) {
+                    }
+
                 }
             });
         }

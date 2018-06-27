@@ -45,6 +45,7 @@
             -->
         </activity>
         <activity android:name=".activitys.WebViewActivity" />
+        <activity android:name=".activitys.WebViewDocumento" />
         <activity android:name=".activitys.PropostaActivity"></activity>
         <activity
             android:name=".activitys.SplachScreenActivity"

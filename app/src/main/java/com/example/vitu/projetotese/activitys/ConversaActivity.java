@@ -1,12 +1,14 @@
 package com.example.vitu.projetotese.activitys;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -62,6 +64,7 @@ public class ConversaActivity extends AppCompatActivity implements View.OnClickL
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_GALLEY_CAPTURE = 2;
+    private static final int REQUEST_DOCUMENT_CAPTURE = 3;
     private String idUser, emailUser, idChat;
     private FirebaseFirestore firebaseFirestore;
     private FirebaseStorage firebaseStorage;
@@ -189,6 +192,19 @@ public class ConversaActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
+    private void abrirDocumentos(){
+        if(Permissoes.temPermissaoGaleria(this)){
+
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            Uri uri = Uri.parse(Environment.getExternalStorageDirectory().getPath() + "/Download/");
+            intent.setDataAndType(uri, "application/pdf");
+            startActivityForResult(intent, REQUEST_DOCUMENT_CAPTURE);
+        }else {
+            Permissoes.pedirPermissaoGaleria(this);
+        }
+    }
+
+
 
     @Override
     public void onClick(View v) {
@@ -200,7 +216,7 @@ public class ConversaActivity extends AppCompatActivity implements View.OnClickL
                 break;
 
             case R.id.fabAnexo:
-                Toast.makeText(this, "Galeria Documentos", Toast.LENGTH_SHORT).show();
+                abrirDocumentos();
                 break;
 
             case R.id.fabFoto:
@@ -281,8 +297,7 @@ public class ConversaActivity extends AppCompatActivity implements View.OnClickL
             //Uri filepath  = data.getData();
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
-            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-            //imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+
             String path = MediaStore.Images.Media.insertImage(this.getContentResolver(), imageBitmap, "Title", null);
             Uri filepath = Uri.parse(path);
             uploadImagem(filepath);
@@ -290,6 +305,49 @@ public class ConversaActivity extends AppCompatActivity implements View.OnClickL
         } else if (requestCode == REQUEST_GALLEY_CAPTURE && resultCode == RESULT_OK){
             Uri filepath  = data.getData();
             uploadImagem(filepath);
+
+        } else if (requestCode == REQUEST_DOCUMENT_CAPTURE && resultCode == RESULT_OK){
+            Uri filepath = data.getData();
+            ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("Uploading do documento...");
+            progressDialog.show();
+            uploadDocument(filepath, progressDialog);
+        }
+    }
+
+    private void uploadDocument(Uri filepath, final ProgressDialog progressDialog){
+        if(filepath != null){
+
+            final StorageReference storageReference = firebaseStorage.getReference()
+                    .child(idChat)
+                    .child("Documentos/"+ UUID.randomUUID().toString());
+            UploadTask uploadTask = storageReference.putFile(filepath);
+
+            Task<Uri> uriTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                @Override
+                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                    return storageReference.getDownloadUrl();
+                }
+            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    if(task.isSuccessful()){
+                        Uri downloadUri = task.getResult();
+
+                        Calendar dataAtual = Calendar.getInstance();
+                        ItemChat itemChat = new ItemChat(downloadUri.toString(),
+                                dataAtual.getTime().toString(), idUser, emailUser, "documentos");
+
+                        firebaseFirestore.collection("chats")
+                                .document(idChat)
+                                .collection("mensagens")
+                                .document()
+                                .set(itemChat);
+
+                        progressDialog.dismiss();
+                    }
+                }
+            });
         }
     }
 
@@ -325,8 +383,5 @@ public class ConversaActivity extends AppCompatActivity implements View.OnClickL
                 }
             });
         }
-
-
-
     }
 }
