@@ -70,6 +70,7 @@ public class ConversaActivity extends AppCompatActivity implements View.OnClickL
     private FirebaseStorage firebaseStorage;
     private RecyclerView recyclerView;
     private ChatAtualAdapter mAdapter;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,6 +160,7 @@ public class ConversaActivity extends AppCompatActivity implements View.OnClickL
                         recyclerView.setAdapter(mAdapter);
                     }
                 });
+        progressDialog = new ProgressDialog(this);
 
     }
 
@@ -244,9 +246,9 @@ public class ConversaActivity extends AppCompatActivity implements View.OnClickL
 
     private void enviarMensagem(){
         if(!textoMensagem.getText().toString().isEmpty()){
-            Calendar dataAtual = Calendar.getInstance();
+            //Calendar dataAtual = Calendar.getInstance();
             //SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy");
-            ItemChat itemChat = new ItemChat(textoMensagem.getText().toString(), dataAtual.getTime().toString(), idUser, emailUser, "mensagem");
+            ItemChat itemChat = new ItemChat(textoMensagem.getText().toString(), Calendar.getInstance().getTime(), idUser, emailUser, "mensagem");
             firebaseFirestore.collection("chats")
                     .document(idChat)
                     .collection("mensagens")
@@ -300,22 +302,25 @@ public class ConversaActivity extends AppCompatActivity implements View.OnClickL
 
             String path = MediaStore.Images.Media.insertImage(this.getContentResolver(), imageBitmap, "Title", null);
             Uri filepath = Uri.parse(path);
+            progressDialog.setTitle("Uploading da imagem...");
+            progressDialog.show();
             uploadImagem(filepath);
 
         } else if (requestCode == REQUEST_GALLEY_CAPTURE && resultCode == RESULT_OK){
             Uri filepath  = data.getData();
+            progressDialog.setTitle("Uploading da imagem...");
+            progressDialog.show();
             uploadImagem(filepath);
 
         } else if (requestCode == REQUEST_DOCUMENT_CAPTURE && resultCode == RESULT_OK){
             Uri filepath = data.getData();
-            ProgressDialog progressDialog = new ProgressDialog(this);
             progressDialog.setTitle("Uploading do documento...");
             progressDialog.show();
-            uploadDocument(filepath, progressDialog);
+            uploadDocument(filepath);
         }
     }
 
-    private void uploadDocument(Uri filepath, final ProgressDialog progressDialog){
+    private void uploadDocument(Uri filepath){
         if(filepath != null){
 
             final StorageReference storageReference = firebaseStorage.getReference()
@@ -334,9 +339,9 @@ public class ConversaActivity extends AppCompatActivity implements View.OnClickL
                     if(task.isSuccessful()){
                         Uri downloadUri = task.getResult();
 
-                        Calendar dataAtual = Calendar.getInstance();
+                        //Calendar dataAtual = Calendar.getInstance();
                         ItemChat itemChat = new ItemChat(downloadUri.toString(),
-                                dataAtual.getTime().toString(), idUser, emailUser, "documentos");
+                                Calendar.getInstance().getTime(), idUser, emailUser, "documentos");
 
                         firebaseFirestore.collection("chats")
                                 .document(idChat)
@@ -370,15 +375,16 @@ public class ConversaActivity extends AppCompatActivity implements View.OnClickL
                     if(task.isSuccessful()){
                         Uri downloadUri = task.getResult();
 
-                        Calendar dataAtual = Calendar.getInstance();
+                        //Calendar dataAtual = Calendar.getInstance();
                         ItemChat itemChat = new ItemChat(downloadUri.toString(),
-                                dataAtual.getTime().toString(), idUser, emailUser, "imagem");
+                                Calendar.getInstance().getTime(), idUser, emailUser, "imagem");
 
                         firebaseFirestore.collection("chats")
                                 .document(idChat)
                                 .collection("mensagens")
                                 .document()
                                 .set(itemChat);
+                        progressDialog.dismiss();
                     }
                 }
             });

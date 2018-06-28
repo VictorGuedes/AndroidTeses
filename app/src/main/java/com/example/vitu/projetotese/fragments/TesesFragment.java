@@ -15,6 +15,9 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.vitu.projetotese.DAO.UserDAO;
@@ -38,6 +41,8 @@ public class TesesFragment extends Fragment {
 
     private ArrayList<PropostaSubmetida> propostas;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private LinearLayout textoOffiline;
+    private Button botaoAtualizar;
 
     public TesesFragment() {}
 
@@ -51,6 +56,8 @@ public class TesesFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        textoOffiline = (LinearLayout) view.findViewById(R.id.texto_offiline);
+        botaoAtualizar = (Button) view.findViewById(R.id.atualizar_teses);
         final RecyclerView recyclerView = view.findViewById(R.id.recyclerView_fragment_teses);
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
@@ -70,6 +77,20 @@ public class TesesFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                getPropostas(requestPropostas, recyclerView);
+            }
+        });
+
+        botaoAtualizar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                textoOffiline.setVisibility(View.INVISIBLE);
+                swipeRefreshLayout.setVisibility(View.VISIBLE);
+
+                UserDAO userDAO = App.getDatabase().getUserDAO();
+                String token = userDAO.getLogedUser().getToken();
+
+                final Call<List<PropostaSubmetida>> requestPropostas = App.getRestClient().getPropostasEndpoint().listarPropostas(token);
                 getPropostas(requestPropostas, recyclerView);
             }
         });
@@ -106,12 +127,15 @@ public class TesesFragment extends Fragment {
         });
     }
 
+
     private void getPropostas(Call<List<PropostaSubmetida>> requestPropostas, final RecyclerView recyclerView){
         requestPropostas.clone().enqueue(new Callback<List<PropostaSubmetida>>() {
             @Override
             public void onResponse(@NonNull Call<List<PropostaSubmetida>> call, @NonNull Response<List<PropostaSubmetida>> response) {
                 if(!response.isSuccessful()){
                     //COLOCAR IMAGEM TRISTE NO FUNDO DA TELA CASO NÃO TENHA NET
+                    swipeRefreshLayout.setVisibility(View.INVISIBLE);
+                    textoOffiline.setVisibility(View.VISIBLE);
                     Log.i("TAG", "Erro " + response.code());
                 }else {
 
@@ -129,6 +153,8 @@ public class TesesFragment extends Fragment {
             public void onFailure(@NonNull Call<List<PropostaSubmetida>> call, @NonNull Throwable t) {
                 //COLOCAR IMAGEM TRISTE NO FUNDO DA TELA CASO NÃO TENHA NET
                 Log.i("TAG_ERRO", t.getMessage());
+                swipeRefreshLayout.setVisibility(View.INVISIBLE);
+                textoOffiline.setVisibility(View.VISIBLE);
             }
         });
     }

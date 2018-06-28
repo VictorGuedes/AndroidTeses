@@ -1,6 +1,7 @@
 package com.example.vitu.projetotese;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -15,9 +16,11 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.example.vitu.projetotese.DAO.UserDAO;
+import com.example.vitu.projetotese.activitys.SplachScreenActivity;
 import com.example.vitu.projetotese.app.App;
 import com.example.vitu.projetotese.fragments.ConversasFragment;
 import com.example.vitu.projetotese.fragments.TesesFragment;
+import com.example.vitu.projetotese.model.UserBanco;
 import com.example.vitu.projetotese.utils.Alerts;
 
 public class MainActivity extends AppCompatActivity
@@ -45,10 +48,11 @@ public class MainActivity extends AppCompatActivity
                 .replace(R.id.fragmentPrincipal, fr)
                 .commit();
 
-        //UserDAO userDAO = App.getDatabase().getUserDAO();
-        //TextView emailUser = (TextView) findViewById(R.id.email_user);
-        //String email = userDAO.getLogedUser().getEMAIL();
-        //emailUser.setText(email);
+        /*UserDAO userDAO = App.getDatabase().getUserDAO();
+        UserBanco userBanco = userDAO.getLogedUser();
+        TextView emailUser = (TextView) findViewById(R.id.email_user);
+        String email = userBanco.getEMAIL();
+        emailUser.setText(email);*/
     }
 
     @Override
@@ -73,6 +77,10 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_logout) {
+            UserDAO userDAO = App.getDatabase().getUserDAO();
+            UserBanco userBanco = userDAO.getLogedUser();
+            userDAO.delete(userBanco);
+            startActivity(new Intent(this, SplachScreenActivity.class));
             return true;
         }
 

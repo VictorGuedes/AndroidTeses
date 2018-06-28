@@ -31,7 +31,6 @@ public class TesesRecyclerViewAdapter extends RecyclerView.Adapter<TesesRecycler
     @Override
     public void onBindViewHolder(TesesRecyclerViewAdapter.ViewHolder holder, int position) {
         holder.titulo.setText(propostas.get(position).getTitulo());
-        //holder.criador.setText(propost.get(position).getProfessor().getNOME_COMPLETO());
         holder.objetivo.setText(propostas.get(position).getObjetivo());
     }
 
@@ -42,13 +41,11 @@ public class TesesRecyclerViewAdapter extends RecyclerView.Adapter<TesesRecycler
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         private TextView titulo;
-        private TextView criador;
         private TextView objetivo;
 
         public ViewHolder(View itemView) {
             super(itemView);
             titulo = (TextView) itemView.findViewById(R.id.tituto_tese_card_row);
-            criador = (TextView) itemView.findViewById(R.id.criador_tese_card_row);
             objetivo = (TextView) itemView.findViewById(R.id.objetivo_tese_card_row);
         }
     }

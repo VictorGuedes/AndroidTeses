@@ -9,14 +9,14 @@ import java.util.Date;
 public class ItemChat {
 
     private String mensagem;
-    private String data;
+    private Date data;
     private String idUserSerder;
     private String email;
     private String tipo;
 
     public ItemChat(){}
 
-    public ItemChat(String mensagem, String data, String idUserSerder, String email, String tipo) {
+    public ItemChat(String mensagem, Date data, String idUserSerder, String email, String tipo) {
         this.mensagem = mensagem;
         this.data = data;
         this.idUserSerder = idUserSerder;
@@ -32,11 +32,11 @@ public class ItemChat {
         this.mensagem = mensagem;
     }
 
-    public String getData() {
+    public Date getData() {
         return data;
     }
 
-    public void setData(String data) {
+    public void setData(Date data) {
         this.data = data;
     }
 

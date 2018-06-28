@@ -17,6 +17,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.vitu.projetotese.DAO.UserDAO;
@@ -41,6 +42,10 @@ public class ConversasFragment extends Fragment {
 
     private ArrayList<Chat> conversas;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private LinearLayout textoOffiline;
+    private Button botaoAtualizar;
+    private String userId;
+    private String userEmail;
 
     public ConversasFragment(){  }
 
@@ -55,6 +60,8 @@ public class ConversasFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        textoOffiline = (LinearLayout) view.findViewById(R.id.texto_offiline);
+        botaoAtualizar = (Button) view.findViewById(R.id.atualizar_teses);
         final RecyclerView recyclerView = view.findViewById(R.id.recyclerView_lista_conversas_pessoas);
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
@@ -65,9 +72,9 @@ public class ConversasFragment extends Fragment {
         swipeRefreshLayout.setRefreshing(true);
 
         UserDAO userDAO = App.getDatabase().getUserDAO();
-        final String userId = userDAO.getLogedUser().getId();
+        userId = userDAO.getLogedUser().getId();
         final String userToken = userDAO.getLogedUser().getToken();
-        final String userEmail = userDAO.getLogedUser().getEMAIL();
+        userEmail = userDAO.getLogedUser().getEMAIL();
 
 
         final Call<List<Chat>> requestChats = App.getRestClient().getChatEndpoint().listarChatsUser(userId, userToken);
@@ -77,6 +84,21 @@ public class ConversasFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                getChats(requestChats, recyclerView);
+            }
+        });
+
+        botaoAtualizar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                textoOffiline.setVisibility(View.INVISIBLE);
+                swipeRefreshLayout.setVisibility(View.VISIBLE);
+                UserDAO userDAO = App.getDatabase().getUserDAO();
+                userId = userDAO.getLogedUser().getId();
+                final String userToken = userDAO.getLogedUser().getToken();
+                userEmail = userDAO.getLogedUser().getEMAIL();
+
+                final Call<List<Chat>> requestChats = App.getRestClient().getChatEndpoint().listarChatsUser(userId, userToken);
                 getChats(requestChats, recyclerView);
             }
         });
@@ -122,7 +144,9 @@ public class ConversasFragment extends Fragment {
             @Override
             public void onResponse(@NonNull Call<List<Chat>> call, @NonNull Response<List<Chat>> response) {
                 if(!response.isSuccessful()){
-                    Toast.makeText(getContext(), "Algo deu errado :/", Toast.LENGTH_SHORT).show();
+                    swipeRefreshLayout.setVisibility(View.INVISIBLE);
+                    textoOffiline.setVisibility(View.VISIBLE);
+                    //Toast.makeText(getContext(), "Algo deu errado :/", Toast.LENGTH_SHORT).show();
                 }else {
                     List<Chat> chats = response.body();
                     conversas = new ArrayList<>();
@@ -136,6 +160,8 @@ public class ConversasFragment extends Fragment {
 
             @Override
             public void onFailure(@NonNull Call<List<Chat>> call, @NonNull Throwable t) {
+                swipeRefreshLayout.setVisibility(View.INVISIBLE);
+                textoOffiline.setVisibility(View.VISIBLE);
                 Log.i("TAG_ERRO", t.getMessage());
             }
         });

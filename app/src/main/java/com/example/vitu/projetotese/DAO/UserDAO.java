@@ -18,7 +18,7 @@ public interface UserDAO {
     public void insert(UserBanco... users);
 
     @Delete
-    public void delete(UserBanco contact);
+    public void delete(UserBanco userBanco);
 
     @Query("SELECT * FROM User")
     public UserBanco getLogedUser();
